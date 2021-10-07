@@ -8,9 +8,10 @@ import { SpotifyService } from './services/spotify.service';
 })
 export class AppComponent implements OnInit {
   title = 'Comunix-spotify';
-  constructor(private spotifyService: SpotifyService) {}
+  constructor(private spotifyService: SpotifyService) { }
 
   ngOnInit() {
-    this.spotifyService.getQuery('snoop').subscribe(console.log);
+    // this.spotifyService.login();
+    this.spotifyService.getQuery('queen').subscribe(console.log);
   }
 }
