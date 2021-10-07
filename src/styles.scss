@@ -1,1 +1,42 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+@import "~@angular/material/theming";
+@include mat-core();
+@import "app/style/base/mat-theme.scss";
+
+$mat-custom-typography-config: mat-typography-config(
+  $display-4:
+    mat-typography-level(112px, 112px, 300, -0.05em, $heading-font-family),
+  $display-3:
+    mat-typography-level(56px, 56px, 500, -0.02em, $heading-font-family),
+  $display-2:
+    mat-typography-level(45px, 48px, 500, -0.005em, $heading-font-family),
+  $display-1: mat-typography-level(34px, 40px, 500, $heading-font-family),
+  $headline: mat-typography-level(24px, 32px, 500, $heading-font-family),
+  $title: mat-typography-level(22px, 32px, 500, $heading-font-family),
+  $subheading-2: mat-typography-level(18px, 28px, 400, $body-font-family),
+  $subheading-1: mat-typography-level(17px, 24px, 400, $body-font-family),
+  $body-2: mat-typography-level(16px, 24px, 500, $body-font-family),
+  $body-1: mat-typography-level(16px, 20px, 400, $body-font-family),
+  $caption: mat-typography-level(14px, 20px, 400, $body-font-family),
+  $button: mat-typography-level(16px, 14px, 500, $body-font-family),
+  $input: mat-typography-level(inherit, 1.125, 400, $body-font-family),
+);
+
+$dark-primary: mat-palette($mat-blue, 500, 100, 900);
+$dark-accent: mat-palette($mat-purple, A700, A200, A400);
+$dark-warn: mat-palette($mat-red);
+$dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+
+@include angular-material-theme($dark-theme);
+@include mat-core($mat-custom-typography-config);
+@import "../src/app/style/main.scss";

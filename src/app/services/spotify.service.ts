@@ -1,5 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ISong, ISongResponse } from '@models/song-list.model';
+import { BehaviorSubject } from 'rxjs';
 import { AuthConfig } from '../models/auth-config';
 import { ScopesBuilder } from '../models/scopes-builder';
 import { AuthService } from './auth.service';
@@ -8,14 +10,23 @@ import { AuthService } from './auth.service';
   providedIn: 'root',
 })
 export class SpotifyService {
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  private songList = new BehaviorSubject<ISong[]>([]);
+
+  get songList$() {
+    return this.songList.asObservable();
+  }
+  constructor(private http: HttpClient, private authService: AuthService) {}
+
+  client_id = '3af5f43840144db2a5ef883b56c5fb7e';
+  client_secret = '6f7ce6bad26843e885b5c2f70a1b8224';
 
   public login(): void {
     const scopes = new ScopesBuilder().build();
     const ac: AuthConfig = {
       client_id: '3af5f43840144db2a5ef883b56c5fb7e',
-      response_type: 'token',
-      redirect_uri: 'http://localhost:4040',
+      client_secret: '6f7ce6bad26843e885b5c2f70a1b8224',
+      response_type: 'code',
+      redirect_uri: encodeURIComponent('http://localhost:4200/home'),
       state: '',
       show_dialog: true,
       scope: scopes,
@@ -29,9 +40,33 @@ export class SpotifyService {
     // define header to specify token
     const headers = new HttpHeaders({
       Authorization:
-        'Bearer BQBcno4muPORaBFzbBt6-ONia6QRqs-v0EwZmyR2pJxJRS82ooHBULp-dQq5mwHw0Vi-Mots7-ZZ9Q4OrLx6ICSSObI2r2CwbhW4mjaHncvoHXQZVSZFzVaiiwP4KQmAI0Pr-9mFbn3V7-jxyiWuWgOyeAGFEH4',
+        'Bearer BQCQNLgncHWNhMJzRSLsubV7zZDzzKKm2xFq-bF90AEKXBCxws7UI64_KWXUNZ1lm29f3-Hoj1TaWPGAgoL_2xAhWyTtWzD2KCoaB_Ppq3m1qWf4T2CF0buQbwWTHbmyUZzhG2TasHE3Ui7R2JoLLGMf2VPO6Ac',
     });
     // execute request
-    return this.http.get(url, { headers });
+    return this.http.get<ISongResponse>(url, { headers }).subscribe((res) => {
+      if (res && res?.tracks?.items) {
+        console.log(res.tracks.items);
+        this.songList.next(res.tracks.items);
+      }
+    });
+  }
+
+  getTokenSpotify() {
+    console.log('getTokenSpotify');
+    const url = 'https://accounts.spotify.com/api/token';
+    const body = {
+      grant_type: 'client_credentials',
+    };
+
+    console.log('getTokenSpotify', body);
+
+    const headers = new HttpHeaders({
+      'Content-Type': '	application/x-www-form-urlencoded',
+      Authorization: `Basic ${this.client_id}:${this.client_secret}`,
+    });
+
+    this.http.post(url, body, { headers }).subscribe((res) => {
+      console.log('getTokenSpotify', 'ok', res);
+    });
   }
 }

@@ -6,12 +6,6 @@ import { SpotifyService } from './services/spotify.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'Comunix-spotify';
-  constructor(private spotifyService: SpotifyService) { }
-
-  ngOnInit() {
-    // this.spotifyService.login();
-    this.spotifyService.getQuery('queen').subscribe(console.log);
-  }
 }

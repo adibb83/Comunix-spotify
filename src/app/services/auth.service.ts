@@ -11,9 +11,10 @@ export class AuthService {
   private authorized$ = new BehaviorSubject<boolean>(false);
 
   private authConfig: AuthConfig = {
-    client_id: '3af5f43840144db2a5ef883b56c5fb7e', // WebPortal App Id. Shoud be config
-    response_type: 'token',
-    redirect_uri: 'http://localhost:4040', // My URL
+    client_id: '54694fa8cf9a44ce84c9d1a778ac9b6c',
+    client_secret: '6f7ce6bad26843e885b5c2f70a1b8224',
+    response_type: 'code',
+    redirect_uri: encodeURIComponent('http://localhost:4200/home'),
     state: '',
     show_dialog: true,
     scope: new ScopesBuilder().build(),
